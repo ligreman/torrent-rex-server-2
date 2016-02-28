@@ -444,7 +444,7 @@ module.exports = function (app) {
             if (content.source === 'N') {
                 console.log("Página de newp original");
 
-                var patron = /(.*) - (Temp\.|Temporada )([0-9]+) \[([A-Za-z 0-9]+)\]\[([a-zA-Z \.0-9]+)\](.+)/;
+                var patron = /(.*) - (Temp\.|Temporada )([0-9]+) \[([A-Za-z 0-9]+)]\[([a-zA-Z \.0-9]+)](.+)/;
 
                 //Saco la lista de temporadas y capítulos del menú izquierdo
                 $('div#content-temp ul li ul li a').each(function () {
@@ -669,7 +669,11 @@ function sanitize(text) {
 
     //Dejo sólo alfanuméricos
     text = text.replace(/[^a-zA-Zñé0-9 ]/g, "");
-    return text.replace('�', 'ñ');
+    text = text.replace('�', 'ñ');
+
+    text = text.replace('Espaol', 'Español');
+
+    return text;
 }
 
 function quitaUrls(temporadas) {
