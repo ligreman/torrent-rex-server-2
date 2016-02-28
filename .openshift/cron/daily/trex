@@ -1,0 +1,2 @@
+#node $OPENSHIFT_REPO_DIR/getTrexSeries-N.js
+#node $OPENSHIFT_REPO_DIR/getTrexSeries-T.js

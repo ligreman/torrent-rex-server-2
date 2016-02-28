@@ -1,0 +1,7 @@
+#git update-index --chmod=+x .openshift/action_hooks/post_deploy
+#Estos ya no hacen falta:
+#node /var/lib/openshift/54c7ea625973caf628000150/app-root/runtime/repo/getTrexSeries-T.js
+#node /var/lib/openshift/54c7ea625973caf628000150/app-root/runtime/repo/getTrexSeries-N.js
+
+#Estos si:
+#node $OPENSHIFT_REPO_DIR/getICalLocations.js
