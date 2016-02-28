@@ -636,7 +636,7 @@ function extractSerieName(url) {
     //Compruebo la fuente
     if (url.indexOf(urls['N']) !== -1) {
         // Es newpct
-        var patron = /(http:\/\/www.newpct.com\/)(descargar-serie(hd|vo)?|todos-los-capitulos\/series)\/([A-Za-z0-9]+)/g;
+        var patron = /(http:\/\/www.newpct.com\/)(descargar-serie(hd|vo)?|todos-los-capitulos\/series)\/([A-Za-z0-9-]+)/g;
         var trozos = patron.exec(url); // el 4 es el nombre
 
         if (trozos.length == 5) {
