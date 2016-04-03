@@ -8,7 +8,7 @@
  *
  */
 
-console.log("Cargo las rutas TRex");
+//console.log("Cargo las rutas TRex");
 
 var newpctUtils = require('../utils/newpct.js');
 
@@ -29,6 +29,8 @@ var urls = {
 }, urlsTorrentDownload = {
     //'N': 'http://tumejorserie.com/descargar/index.php?link=torrents/'
     'N': 'http://www.newpct.com/torrents/'
+}, urlsSearch = {
+    'N': 'http://www.newpct.com/buscar-descargas/'
 };
 
 var eventEmitter = new events.EventEmitter();
@@ -44,7 +46,7 @@ var dbTrex = mongoose.createConnection(process.env.OPENSHIFT_MONGODB_DB_URL + pr
 
 //Modo debug
 dbTrex.on('error', console.error.bind(console, 'Error conectando a MongoDB:'));
-dbTrex.on("connected", console.log.bind(console, 'Conectado a MongoDB: Trex'));
+dbTrex.on("connected", console.info.bind(console, 'Conectado a MongoDB: Trex'));
 
 //Modelos
 var Serie = dbTrex.model('Serie', modelos.serieDetailSchema),
@@ -59,7 +61,7 @@ module.exports = function (app) {
 
     //Envío una respuesta JSON
     eventEmitter.on('sendResponse', function (responseObject, responseJSON) {
-        console.log("Envio respuesta");
+        //console.log("Envio respuesta");
         responseObject.set({
             'Content-Type': 'application/json; charset=utf-8'
         }).json(responseJSON);
@@ -86,19 +88,19 @@ module.exports = function (app) {
         var idSerie = req.params.idSerie,
             response = {};
 
-        console.log("Voy a buscar la serie " + idSerie);
+        //console.log("Voy a buscar la serie " + idSerie);
 
         updateSerie(idSerie, function (error, tempData) {
-            console.log("TERMINO UPDATE");
-            console.log(tempData);
+            //console.log("TERMINO UPDATE");
+            //console.log(tempData);
             if (error !== null || tempData === null || tempData === undefined) {
                 response = {torrents: null, error: "Se produjo un error"};
                 res.send(response);
                 throw "Error: 500 - Error al hacer el update";
             }
 
-            console.log("TEMPDATA");
-            console.log(tempData);
+            //console.log("TEMPDATA");
+            //console.log(tempData);
             var nombrecito = tempData.name;
             if (!nombrecito) {
                 nombrecito = tempData.titleSmall;
@@ -115,8 +117,8 @@ module.exports = function (app) {
                 error: ""
             };
 
-            console.log("La respuesta");
-            console.log(response);
+            //console.log("La respuesta");
+            //console.log(response);
 
             //Respuesta
             eventEmitter.emit('sendResponse', res, response);
@@ -143,7 +145,7 @@ module.exports = function (app) {
             throw "Error: 500";
         }
 
-        console.log("addSerie " + source + " " + serie + " " + name);
+        //console.log("addSerie " + source + " " + serie + " " + name);
 
         if (source === 'N' || source === 'N1') {
             serieUrl = urls[source] + serie;
@@ -157,7 +159,7 @@ module.exports = function (app) {
         var id = md5(source + extractSerieName(serie));
         req.params.idSerie = id;
 
-        console.log("Añado la serie: " + id);
+        //console.log("Añado la serie: " + id);
 
         //Busco a ver si tengo ya la serie
         Serie.findOne({_id: id})
@@ -169,7 +171,7 @@ module.exports = function (app) {
                 } else {
                     // No la tengo así que la guardo
                     if (serieMDB === null) {
-                        console.log("No tengo la serie aún");
+                        //console.log("No tengo la serie aún");
                         //La guardo
                         var laSerie = {
                             _id: id,
@@ -177,8 +179,8 @@ module.exports = function (app) {
                             url: serieUrl,
                             name: capitalize(name)
                         };
-                        console.log("Genero una serie nueva");
-                        console.log(laSerie);
+                        //console.log("Genero una serie nueva");
+                        //console.log(laSerie);
 
                         var newSerie = new Serie(laSerie);
                         newSerie.save(function (err) {
@@ -211,7 +213,7 @@ module.exports = function (app) {
                 throw "Error: 500";
             }
 
-            console.log("busco el torrent");
+            //console.log("busco el torrent");
             //Busco el torrent concreto que quiero bajar
             var continuar = true;
             for (var index in tempData.temporadas) {
@@ -227,14 +229,14 @@ module.exports = function (app) {
                 }
             }
 
-            console.log("Ya lo tengo lo descargo");
-            console.log(chapterToDownload);
+            //console.log("Ya lo tengo lo descargo");
+            //console.log(chapterToDownload);
             //Ya tengo el capítulo a bajar así que dependiendo de la fuente lo bajo o tengo que hacer más cosas
             switch (chapterToDownload.source) {
                 case 'N1':
                     //Para este caso primero tengo que coger la web del capitulo y el id del torrent de ahí
                     var url = urls['N'] + 'descarga-torrent/' + chapterToDownload.url;
-                    console.log('Consulto la web primero: ' + url);
+                    //console.log('Consulto la web primero: ' + url);
                     request(url, function (err, resp, body) {
                         if (err) {
                             response = {error: "Se produjo un error"};
@@ -251,7 +253,7 @@ module.exports = function (app) {
                         //Extraigo el identificador de la serie
                         href = href.replace('http://tumejorjuego.com/download/index.php?link=descargar-torrent/', '');
 
-                        console.log('Torrent de newpct');
+                        //console.log('Torrent de newpct');
                         downloadTorrent(res, href, chapterToDownload.title, chapterToDownload.source);
                     });
                     break;
@@ -259,7 +261,7 @@ module.exports = function (app) {
                     //Para este caso primero tengo que coger la web del capitulo y el id del torrent de ahí
                     var url2 = chapterToDownload.url;
 
-                    console.log('Consulto la web primero: ' + url2);
+                    //console.log('Consulto la web primero: ' + url2);
                     request(url2, function (err, resp, body) {
                         if (err) {
                             response = {error: "Se produjo un error"};
@@ -276,7 +278,7 @@ module.exports = function (app) {
                         //Extraigo el identificador de la serie
                         href = href.replace('http://tumejorserie.com/descargar/index.php?link=torrents/', '');
 
-                        console.log('Torrent de newpct');
+                        //console.log('Torrent de newpct');
                         downloadTorrent(res, href, chapterToDownload.title, chapterToDownload.source);
                     });
                     break;
@@ -284,12 +286,79 @@ module.exports = function (app) {
         });
     };
 
+    /**
+     * Busco un torrent
+     */
+    var searchTorrent = function (req, res) {
+        var texto = atob(req.params.text), response = {}, torrentList = [];
+
+        request.post({url: urlsSearch.N, form: {q: texto}}, function (err, resp, body) {
+            if (err) {
+                response = {error: "Se produjo un error"};
+                res.send(response);
+                throw err;
+            }
+
+            var $ = cheerio.load(body);
+
+            //Cojo la lista
+            var lista = $('#categoryTable').find('tbody').find('tr')
+                .each(function (i, fila) {
+                    var tds = $(this).find('td');
+
+                    var href = $(tds[1]).find('a').attr('href');
+
+                    if (href) {
+                        href = btoa(href);
+                        torrentList.push({
+                            date: sanitize($(tds[0]).text(), true),
+                            title: sanitize($(tds[1]).text(), true),
+                            url: href,
+                            size: sanitize($(tds[2]).text(), true)
+                        })
+                    }
+                });
+
+            response = {
+                search: torrentList,
+                error: ''
+            }
+
+            eventEmitter.emit('sendResponse', res, response);
+        });
+    };
+
+    var getDirectTorrent = function (req, res) {
+        var url = atob(req.params.urlTorrent), response = {};
+
+        request(url, function (err, resp, body) {
+            if (err) {
+                response = {error: "Se produjo un error"};
+                res.send(response);
+                throw err;
+            }
+
+            var $ = cheerio.load(body);
+
+            //Cojo el id del torrent
+            //http://tumejorserie.com/descargar/index.php?link=torrents/042969.torrent
+            var href = $('#content-torrent').find('a').attr('href');
+            var title = $('#title_ficha').find('a').text();
+
+            //Extraigo el identificador de la serie
+            href = href.replace('http://tumejorserie.com/descargar/index.php?link=torrents/', '');
+
+            downloadTorrent(res, href, title, 'N');
+        });
+    };
 
     //Las rutas
     app.get('/api/trex/serie/:idSerie', getSerieById);   //Lista de temporadas y capítulos de una serie. Quality: low,high
     app.get('/api/trex/download/:idSerie/:idChapter', getTorrent);   //Descarga de series de T y N
     app.get('/api/trex/addSerie/:source/:serie/:name', addSerie); //Añade serie por url. Source: N - N1. Serie: url. Name: nombre
-    //app.get('/api/trex/download/:idTorrent', getDirectTorrent); //Descarga de torrents buscados
+
+    app.get('/api/trex/search/:text', searchTorrent); //Busca torrents
+    app.get('/api/trex/downloadTorrent/:urlTorrent', getDirectTorrent); //Descarga de torrents buscados
 
 
     //-----------------------------------------------------------------------------------------------
@@ -304,10 +373,10 @@ module.exports = function (app) {
             .exec(function (err, serie) {
                 if (err || serie === null) {
                     callback(null);
-                    console.log("Error al buscar la serie en mongo: " + idSerie);
+                    //console.log("Error al buscar la serie en mongo: " + idSerie);
                     return null;
                 } else {
-                    console.log("updateSerie ha encontrado la serie");
+                    //console.log("updateSerie ha encontrado la serie");
                     //Encontré la serie
                     updateSerieContinue(serie, callback);
                 }
@@ -320,19 +389,19 @@ module.exports = function (app) {
 
         //Si el lastUpdate no han pasado 24 horas no actualizo y devuelvo el contenido del json este
         if (content.lastUpdate !== undefined) {
-            console.log("Se ha actualizado antes alguna vez la serie");
+            //console.log("Se ha actualizado antes alguna vez la serie");
             jsonTime = parseInt(content.lastUpdate, 10);
         } else {
-            console.log("Nunca se había actualizado la serie");
+            //console.log("Nunca se había actualizado la serie");
             jsonTime = 0;
         }
 
-        console.log("El contenido");
-        console.log(content);
+        //console.log("El contenido");
+        //console.log(content);
 
         //Si está actualizado y ya tengo los datos devuelvo lo del json
         if (content.seasons !== undefined && Object.keys(content.seasons).length && (currentTime < (jsonTime + 24 * 60 * 60 * 1000))) {
-            console.log('No hace falta actualizar');
+            //console.log('No hace falta actualizar');
             callback(null, {
                 temporadas: content.seasons,
                 name: content.name,
@@ -343,7 +412,7 @@ module.exports = function (app) {
 
         //Tengo que actualizar los datos
         $url = content.url;
-        console.log($url);
+        //console.log($url);
         //http://trex-lovehinaesp.rhcloud.com/api/trex/torrents/dG9ycmVudHMucGhwP3Byb2Nlc2FyPTEmY2F0ZWdvcmlhcz0nU2VyaWVzJyZzdWJjYXRlZ29yaWE9MTg2NA==/T
         //http://trex-lovehinaesp.rhcloud.com/api/trex/torrents/torrents.php?procesar=1&categorias='Series'&subcategoria=1864/T
         //series-hd/american-horror-story/
@@ -374,7 +443,7 @@ module.exports = function (app) {
                     category = 'Serie V.O.'
                 }
 
-                console.log("Num pags: " + numpags);
+                //console.log("Num pags: " + numpags);
 
                 //Miro si hay más páginas o no
                 if (numpags == 0) {
@@ -392,20 +461,20 @@ module.exports = function (app) {
                     }
                 }
 
-                console.log("PAGINAS");
-                console.log(paginas);
+                //console.log("PAGINAS");
+                //console.log(paginas);
 
-                console.log('    Ahora saco los capítulos');
+                //console.log('    Ahora saco los capítulos');
 
                 //Cojo la información de las páginas
                 async.map(paginas, newpctUtils.extractNewcptChapters, function (err, results) {
                     if (err) {
-                        console.log('Error al obtener los capitulos de newpct1: ' + err);
+                        //console.log('Error al obtener los capitulos de newpct1: ' + err);
                     }
 
                     //Tengo en results un array de arrays url + cabecera
-                    console.log("RESULTADOOOOOOOS");
-                    console.log(results);
+                    //console.log("RESULTADOOOOOOOS");
+                    //console.log(results);
 
                     //Recorro los results extrayendo la información
                     temporadasResponse = newpctUtils.parseTorrentsNewpct(results, urls['N'], md5);
@@ -427,10 +496,10 @@ module.exports = function (app) {
                     //Guardo en Mongo
                     Serie.update({"_id": content._id}, contentUpdated, function (err) {
                         if (err) {
-                            console.log("Error actualizando la serie N1 en mongo: " + err);
+                            //console.log("Error actualizando la serie N1 en mongo: " + err);
                             callback(err);
                         } else {
-                            console.log("CALLBACK");
+                            //console.log("CALLBACK");
                             callback(null, {
                                 temporadas: temporadasResponse,
                                 source: contentUpdated.source
@@ -442,7 +511,7 @@ module.exports = function (app) {
             //�
             //NewPCT
             if (content.source === 'N') {
-                console.log("Página de newp original");
+                //console.log("Página de newp original");
 
                 var patron = /(.*) - (Temp\.|Temporada )([0-9]+) \[([A-Za-z 0-9]+)]\[([a-zA-Z \.0-9]+)](.+)/;
 
@@ -453,8 +522,8 @@ module.exports = function (app) {
 
                     //enlace = enlace.replace(urls['N'], '');
 
-                    console.log('patron: ' + patron);
-                    console.log('title: ' + title);
+                    //console.log('patron: ' + patron);
+                    //console.log('title: ' + title);
 
                     var trozos = patron.exec(title);
 
@@ -464,8 +533,8 @@ module.exports = function (app) {
 
                         var capi = trozos[5].substr(-2); //los dos últimos dígitos son el capi
 
-                        console.log("Trozos");
-                        console.log(trozos);
+                        //console.log("Trozos");
+                        //console.log(trozos);
 
                         if (temporadasResponse[mTemporada] === undefined) {
                             temporadasResponse[mTemporada] = [];
@@ -530,10 +599,10 @@ module.exports = function (app) {
                 Serie
                     .update({"_id": content._id}, contentUpdated, function (err) {
                         if (err) {
-                            console.log("Error actualizando la serie N en mongo: " + err);
+                            //console.log("Error actualizando la serie N en mongo: " + err);
                             callback(err);
                         } else {
-                            console.log("CALLBACK");
+                            //console.log("CALLBACK");
                             callback(null, {
                                 temporadas: temporadasResponse,
                                 source: contentUpdated.source
@@ -547,27 +616,27 @@ module.exports = function (app) {
     var downloadTorrent = function downloadTorrent(res, idTorrent, titleTorrent, source) {
         var $url = urlsTorrentDownload[source] + idTorrent;
 
-        console.log("Descargo torrent: " + $url);
+        //console.log("Descargo torrent: " + $url);
 
         http.get($url, function (resp) {
             if (resp.statusCode !== 200) {
-                //console.log(resp);
+                ////console.log(resp);
                 var response = {error: "Se produjo un error", status: resp.statusCode};
                 res.status(500).send(response);
                 throw "Error: 500";
             } else {
-                console.log(resp.headers);
+                //console.log(resp.headers);
                 var disposition = resp.headers['content-disposition'],
                     content = resp.headers['content-type'];
 
                 if (disposition === undefined) {
-                    disposition = 'attachment; filename="' + titleTorrent + '.torrent"';
+                    disposition = 'attachment; filename="' + titleTorrent + '.torrent';
                 }
                 if (content === undefined) {
                     content = 'application/octet-stream';
                 }
-                console.log("content: " + content);
-                console.log("dispo:" + disposition);
+                //console.log("content: " + content);
+                //console.log("dispo:" + disposition);
                 res.set({
                     'Content-Type': content,
                     'Content-Disposition': disposition
@@ -589,8 +658,8 @@ function generateTorrentsData(temporadas, source) {
 
     resp.seasonsDetail = {};
 
-    console.log("Da temps");
-    console.log(temporadas);
+    //console.log("Da temps");
+    //console.log(temporadas);
 
     for (var index in temporadas) {
         if (temporadas.hasOwnProperty(index) && temporadas[index]) {
@@ -662,18 +731,22 @@ function normalizeName(name) {
     });
 }
 
-function sanitize(text) {
+function sanitize(text, extra) {
     if (!text) {
         return null;
     }
 
     //Dejo sólo alfanuméricos
-    text = text.replace(/[^a-zA-Zñé0-9 ]/g, "");
+    if (extra) {
+        text = text.replace(/[^a-zA-ZñáéíóúüÁÉÍÓÚÜ0-9\[\] \.\-_\+\(\)]/g, "");
+    } else {
+        text = text.replace(/[^a-zA-ZñáéíóúüÁÉÍÓÚÜ0-9 ]/g, "");
+    }
     text = text.replace('�', 'ñ');
 
     text = text.replace('Espaol', 'Español');
 
-    return text;
+    return text.trim();
 }
 
 function quitaUrls(temporadas) {

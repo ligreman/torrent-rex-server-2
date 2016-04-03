@@ -1,9 +1,9 @@
 var extractNewcptChapters = function extractNewcptChapters(pagina, callback) {
     //innerElements.push({name: $(this).text(), url: urlEncoded});
-    //console.log("Pido pagina");
-    //console.log(pagina);
+    ////console.log("Pido pagina");
+    ////console.log(pagina);
     pagina.request(pagina.url, function (err, resp, body) {
-        //console.log("Paginita");
+        ////console.log("Paginita");
         if (err) {
             callback(err);
         }
@@ -19,7 +19,7 @@ var extractNewcptChapters = function extractNewcptChapters(pagina, callback) {
             var h2 = $(this).find('h2').text();
             var urlEncoded;
 
-            //console.log(title);
+            ////console.log(title);
             urlEncoded = encodeURI(href);
 
             if (cabecera !== '') {
@@ -191,8 +191,8 @@ var extractNewpctMetadata = function extractNewpctMetadata(txt) {
      size: res[21]
      };
 
-     //console.log("METADATA");
-     //console.log(response);
+     ////console.log("METADATA");
+     ////console.log(response);
      return response;
      } else {
      return null;
