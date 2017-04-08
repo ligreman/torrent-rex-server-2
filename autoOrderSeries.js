@@ -262,19 +262,24 @@ function decompressZip(comprimido, torrentFile) {
     var dir = pathTorrents + comprimido.folder;
 
     logger("   > Descomprimo " + comprimido.file);
+	var txtFile = null;
 
     // Tengo que buscar un fichero txt con el texto contraseña en el nombre
-    var dirFiles = fs.readdirSync(dir), txtFile = null;
-    dirFiles.forEach(function (ficheroTXT) {
-        //Miro a ver si es un .txt
-        if (!ficheroTXT.endsWith('.txt')) {
-            return;
-        }
-        // Es el de la contraseña
-        if (ficheroTXT.toLowerCase().includes('contraseña')) {
-            txtFile = ficheroTXT;
-        }
-    });
+	try	{
+		var dirFiles = fs.readdirSync(dir);
+		dirFiles.forEach(function (ficheroTXT) {
+			//Miro a ver si es un .txt
+			if (!ficheroTXT.endsWith('.txt')) {
+				return;
+			}
+			// Es el de la contraseña
+			if (ficheroTXT.toLowerCase().includes('contraseña')) {
+				txtFile = ficheroTXT;
+			}
+		});		
+	} catch (error) {
+		logger("Error: " + error);
+	}
 
     if (!txtFile) {
 		// Intento descomprimir sin contraseña a ver
