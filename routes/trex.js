@@ -8,7 +8,7 @@
  *
  */
 
-//console.log("Cargo las rutas TRex");
+    //console.log("Cargo las rutas TRex");
 
 var newpctUtils = require('../utils/newpct.js');
 
@@ -21,7 +21,7 @@ var request = require('request'),
     async = require('async'),
     atob = require('atob'),
     btoa = require('btoa'),
-//    levi = require('levenshtein'),
+    //    levi = require('levenshtein'),
     events = require('events');
 
 var urls = {
@@ -40,9 +40,17 @@ var eventEmitter = new events.EventEmitter();
  */
 
 //Inicio conexión de mongo
-var dbTrex = mongoose.createConnection(process.env.OPENSHIFT_MONGODB_DB_URL + process.env.OPENSHIFT_APP_NAME || 'mongodb://localhost/trex', {
+var conexion = '';
+if (process.env.MONGODB_SERVICE_HOST) {
+    conexion = 'mongodb://' + process.env.MONGODB_USER + ':' + process.env.MONGODB_PASSWORD + '@' + process.env.MONGODB_SERVICE_HOST + ':' + process.env.MONGODB_SERVICE_PORT + '/' + process.env.MONGODB_DATABASE;
+} else {
+    conexion = 'mongodb://localhost/trex';
+}
+
+var dbTrex = mongoose.createConnection(conexion, {
     db: {safe: true}
 });
+
 
 //Modo debug
 dbTrex.on('error', console.error.bind(console, 'Error conectando a MongoDB:'));

@@ -6,8 +6,8 @@ var express = require('express'),
     http = require('http'),
     mongoose = require('mongoose'),
     server = http.createServer(app),
-    port = process.env.OPENSHIFT_NODEJS_PORT || 80,
-    ip = process.env.OPENSHIFT_NODEJS_IP || '127.0.0.1';
+    port = process.env.TREX_SERVER_SERVICE_PORT || 80,
+    ip = process.env.TREX_SERVER_SERVICE_HOST || '127.0.0.1'; //'0.0.0.0'
 
 // Configuramos la app para que pueda realizar métodos REST
 app.configure(function () {
