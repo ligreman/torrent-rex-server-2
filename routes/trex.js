@@ -74,6 +74,9 @@ if (mongoURL === null && process.env.DATABASE_SERVICE_NAME) {
     conexion = 'mongodb://localhost/trex';
 }
 
+console.log('Conectando a base de datos');
+console.log(conexion);
+
 var dbTrex = mongoose.createConnection(conexion, {
     db: {safe: true}
 });
