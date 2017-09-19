@@ -5,9 +5,11 @@ var express = require('express'),
     app = express(),
     http = require('http'),
     mongoose = require('mongoose'),
-    server = http.createServer(app),
-    port = process.env.TREX_SERVER_SERVICE_PORT || 80,
-    ip = process.env.TREX_SERVER_SERVICE_HOST || '127.0.0.1'; //'0.0.0.0'
+    morgan = require('morgan'),
+    server = http.createServer(app);
+
+var port = process.env.PORT || process.env.OPENSHIFT_NODEJS_PORT || 8080,
+    ip = process.env.IP || process.env.OPENSHIFT_NODEJS_IP || '0.0.0.0';
 
 // Configuramos la app para que pueda realizar métodos REST
 app.configure(function () {
@@ -15,6 +17,7 @@ app.configure(function () {
     app.use(express.compress());
     //app.use(express.methodOverride()); // HTTP PUT and DELETE support
     app.use(app.router); // simple route management
+    app.use(morgan('combined'));
 });
 
 // CORSAdd headers
@@ -37,23 +40,6 @@ app.use(function (req, res, next) {
 var tt = require('./routes/trex')(app);
 
 mongoose.set('debug', false);
-
-/*//Inicio conexión de mongo
- var dbTrex = mongoose.createConnection(process.env.OPENSHIFT_MONGODB_DB_URL + process.env.OPENSHIFT_APP_NAME || 'mongodb://localhost/trex', {
- db: {safe: true}
- });
- var dbCine = mongoose.createConnection(process.env.OPENSHIFT_MONGODB_DB_URL + process.env.OPENSHIFT_APP_NAME || 'mongodb://localhost/cine', {
- db: {safe: true}
- });
-
- //Modo debug
- dbTrex.set('debug', true);
- dbCine.set('debug', true);
- dbTrex.on('error', console.error.bind(console, 'Error conectando a MongoDB:'));
- dbCine.on('error', console.error.bind(console, 'Error conectando a MongoDB:'));
- dbTrex.on("connected", console.log.bind(console, 'Conectado a MongoDB'));
- dbCine.on("connected", console.log.bind(console, 'Conectado a MongoDB'));*/
-
 
 // Si no se "queda" en una de las rutas anteriores, devuelvo un 404 siempre
 app.use(function (req, res) {
