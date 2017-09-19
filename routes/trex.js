@@ -44,7 +44,11 @@ var conexion = '';
 var mongoURL = process.env.OPENSHIFT_MONGODB_DB_URL || process.env.MONGO_URL,
     mongoURLLabel = "";
 
-if (mongoURL === null && process.env.DATABASE_SERVICE_NAME) {
+console.log('mongoURL es');
+console.log(mongoURL);
+
+if ((!mongoURL || mongoURL === null) && process.env.DATABASE_SERVICE_NAME) {
+    console.log("Voy a darle un valor");
     var mongoServiceName = process.env.DATABASE_SERVICE_NAME.toUpperCase();
 
     var mongoHost = process.env[mongoServiceName + '_SERVICE_HOST'],
@@ -55,6 +59,12 @@ if (mongoURL === null && process.env.DATABASE_SERVICE_NAME) {
     //mongoDatabase = process.env[mongoServiceName + '_DATABASE'],
     //mongoPassword = process.env[mongoServiceName + '_PASSWORD']
     //mongoUser = process.env[mongoServiceName + '_USER'];
+
+    console.log(mongoHost);
+    console.log(mongoPort);
+    console.log(mongoDatabase);
+    console.log(mongoPassword);
+    console.log(mongoUser);
 
     if (mongoHost && mongoPort && mongoDatabase) {
         mongoURLLabel = mongoURL = 'mongodb://';
