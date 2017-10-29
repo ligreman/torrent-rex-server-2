@@ -1,139 +1,135 @@
 {
-    "name": "TRex",
-    "description": "Torrent Rex",
-    "version": "2.2.0",
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/openshift/origin-server"
-    },
-    "engines": {
-        "node": ">= 0.6.0",
-        "npm": ">= 1.0.0"
-    },
-    "dependencies": {
-        "async": "^0.9.0",
-        "atob": "^2.0.0",
-        "btoa": "^1.1.2",
-        "cheerio": "*",
-        "express": "^3.4.8",
-        "levenshtein": "^1.0.5",
-        "md5": "^2.0.0",
-        "mongoose": "^4.0.0",
-        "parse-torrent": "^5.4.0",
-        "prompt": "^0.2.14",
-        "q": "^1.2.0",
-        "readline-sync": "^1.2.19",
-        "request": "*"
-    },
-    "bundleDependencies": [],
-    "private": true,
-    "main": "app.js",
-    "scripts": {
-        "start": "node app.js"
-    },
-    "jshintConfig": {
-        "bitwise": true,
-        "curly": true,
-        "camelcase": true,
-        "eqeqeq": true,
-        "freeze": true,
-        "immed": true,
-        "latedef": false,
-        "newcap": true,
-        "noarg": true,
-        "forin": true,
-        "sub": true,
-        "undef": true,
-        "unused": true,
-        "noempty": true,
-        "boss": false,
-        "eqnull": true,
-        "browser": true,
-        "indent": 4,
-        "maxcomplexity": 7,
-        "maxstatements": 36,
-        "maxparams": 5,
-        "maxdepth": 3,
-        "maxlen": 100,
-        "trailing": true,
-        "maxerr": 5,
-        "globals": {
-            "module": true,
-            "require": true,
-            "describe": true,
-            "it": true,
-            "expect": true,
-            "assert": true,
-            "chai": true,
-            "Buffer": true
-        }
-    },
-    "jscsConfig": {
-        "requireCurlyBraces": [
-            "if",
-            "else",
-            "for",
-            "while",
-            "do",
-            "try",
-            "catch"
-        ],
-        "requireSpaceAfterKeywords": [
-            "if",
-            "else",
-            "for",
-            "while",
-            "do",
-            "switch",
-            "return",
-            "try",
-            "catch"
-        ],
-        "disallowLeftStickedOperators": [
-            "?",
-            "/",
-            "*",
-            "=",
-            "==",
-            "===",
-            "!=",
-            "!==",
-            ">",
-            ">=",
-            "<",
-            "<="
-        ],
-        "disallowRightStickedOperators": [
-            "?",
-            "/",
-            "*",
-            ":",
-            "=",
-            "==",
-            "===",
-            "!=",
-            "!==",
-            ">",
-            ">=",
-            "<",
-            "<="
-        ],
-        "requireRightStickedOperators": [
-            "!"
-        ],
-        "requireLeftStickedOperators": [
-            ","
-        ],
-        "disallowImplicitTypeConversion": [
-            "string"
-        ],
-        "disallowKeywords": [
-            "with"
-        ],
-        "disallowMultipleLineBreaks": true,
-        "safeContextKeyword": "self",
-        "disallowKeywordsOnNewLine": [
-            "else"
-        ]
+  "name": "TRex",
+  "description": "Torrent Rex",
+  "version": "2.2.0",
+  "engines": {
+    "node": ">= 0.6.0",
+    "npm": ">= 1.0.0"
+  },
+  "dependencies": {
+    "async": "^0.9.0",
+    "atob": "^2.0.0",
+    "btoa": "^1.1.2",
+    "cheerio": "*",
+    "express": "^3.4.8",
+    "md5": "^2.0.0",
+    "mongoose": "^4.0.0",
+    "parse-torrent": "^5.4.0",
+    "prompt": "^0.2.14",
+    "q": "^1.2.0",
+    "readline-sync": "^1.2.19",
+    "request": "*",
+    "morgan": "^1.7.0"
+  },
+  "bundleDependencies": [],
+  "private": true,
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js"
+  },
+  "jshintConfig": {
+    "bitwise": true,
+    "curly": true,
+    "camelcase": true,
+    "eqeqeq": true,
+    "freeze": true,
+    "immed": true,
+    "latedef": false,
+    "newcap": true,
+    "noarg": true,
+    "forin": true,
+    "sub": true,
+    "undef": true,
+    "unused": true,
+    "noempty": true,
+    "boss": false,
+    "eqnull": true,
+    "browser": true,
+    "indent": 4,
+    "maxcomplexity": 7,
+    "maxstatements": 36,
+    "maxparams": 5,
+    "maxdepth": 3,
+    "maxlen": 100,
+    "trailing": true,
+    "maxerr": 5,
+    "globals": {
+      "module": true,
+      "require": true,
+      "describe": true,
+      "it": true,
+      "expect": true,
+      "assert": true,
+      "chai": true,
+      "Buffer": true
     }
+  },
+  "jscsConfig": {
+    "requireCurlyBraces": [
+      "if",
+      "else",
+      "for",
+      "while",
+      "do",
+      "try",
+      "catch"
+    ],
+    "requireSpaceAfterKeywords": [
+      "if",
+      "else",
+      "for",
+      "while",
+      "do",
+      "switch",
+      "return",
+      "try",
+      "catch"
+    ],
+    "disallowLeftStickedOperators": [
+      "?",
+      "/",
+      "*",
+      "=",
+      "==",
+      "===",
+      "!=",
+      "!==",
+      ">",
+      ">=",
+      "<",
+      "<="
+    ],
+    "disallowRightStickedOperators": [
+      "?",
+      "/",
+      "*",
+      ":",
+      "=",
+      "==",
+      "===",
+      "!=",
+      "!==",
+      ">",
+      ">=",
+      "<",
+      "<="
+    ],
+    "requireRightStickedOperators": [
+      "!"
+    ],
+    "requireLeftStickedOperators": [
+      ","
+    ],
+    "disallowImplicitTypeConversion": [
+      "string"
+    ],
+    "disallowKeywords": [
+      "with"
+    ],
+    "disallowMultipleLineBreaks": true,
+    "safeContextKeyword": "self",
+    "disallowKeywordsOnNewLine": [
+      "else"
+    ]
+  }
 }

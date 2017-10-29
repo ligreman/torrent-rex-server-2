@@ -21,7 +21,6 @@ var request = require('request'),
     async = require('async'),
     atob = require('atob'),
     btoa = require('btoa'),
-    //    levi = require('levenshtein'),
     events = require('events');
 
 var urls = {
@@ -84,6 +83,9 @@ if ((!mongoURL || mongoURL === null) && process.env.DATABASE_SERVICE_NAME) {
 } else {
     conexion = 'mongodb://localhost/trex';
 }
+
+console.log('Conectando a base de datos');
+console.log(conexion);
 
 var dbTrex = mongoose.createConnection(conexion, {
     db: {safe: true}
@@ -405,6 +407,11 @@ module.exports = function (app) {
 
     app.get('/api/trex/search/:text', searchTorrent); //Busca torrents
     app.get('/api/trex/downloadTorrent/:urlTorrent', getDirectTorrent); //Descarga de torrents buscados
+
+    // Check status
+    app.get('/pagecount', function (req, res) {
+        res.send('ok');
+    });
 
 
     //-----------------------------------------------------------------------------------------------
