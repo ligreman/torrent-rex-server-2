@@ -124,3 +124,19 @@ module.exports = function (grunt) {
 
     grunt.registerTask('default', []);
 };
+
+/*
+"devDependencies": {
+        "chai": "1.9.1",
+        "grunt": "*",
+        "grunt-contrib-clean": "0.5.0",
+        "grunt-contrib-copy": "0.5.0",
+        "grunt-contrib-jshint": "0.9.2",
+        "grunt-istanbul": "~0.2.4",
+        "grunt-istanbul-coverage": "0.0.5",
+        "grunt-jscs-checker": "*",
+        "grunt-mocha-test": "~0.9.0",
+        "grunt-shell": "^1.1.2",
+        "grunt-text-replace": "^0.4.0"
+    },
+ */
